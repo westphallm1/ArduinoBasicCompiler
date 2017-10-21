@@ -1,0 +1,14 @@
+int count = 1, temp
+string fizz(5) = "fizz", buzz(5) = "buzz"
+
+for count = 1 , 100
+  set temp = count % 3
+  if temp == 0
+    print fizz
+  endif
+
+  set temp = count % 5
+  if temp == 0
+    print buzz
+  endif
+endfor
