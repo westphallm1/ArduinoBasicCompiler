@@ -1,5 +1,6 @@
-int a = 1,b = 1,c
+int a = 1, b = 1, c = 1
 int i,n
+
 string prompt(20) = "enter a number: "
 string out1(5) = "fib("
 string out2(5) = ") = "
@@ -7,19 +8,13 @@ string out2(5) = ") = "
 print prompt
 input n
 
-if n < 2
-  print 1
-  exit
+if n > 2
+  for i = 2 , n 
+    set c = a + b
+    set a = b
+    set b = c
+  endfor
 endif
 
-for i = 2 , n 
-  set c = a + b
-  set a = b
-  set b = c
-endfor
-
-print out1
-print n
-print out2
-print c
+print out1, n, out2, c
 exit

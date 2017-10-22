@@ -15,11 +15,8 @@ struct _string_name_node{
     short len;
     struct _string_name_node * next;
 };
-
 struct _int_name_node int_names;
-struct _int_name_node * int_tail = &int_names;
 struct _string_name_node string_names;
-struct _string_name_node * string_tail= &string_names;
 
 short is_int_var(char * name);
 short is_string_var(char * name);

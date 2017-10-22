@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include"parse_set.h"
+#include"parse_print.h"
 #include"var_types.h"
 
 const char * command_names [] = {
@@ -18,15 +19,12 @@ short STR_OFFSET=0;
 short PROG_CTR;
 
 
-void print_my_ints();
-void print_my_strings();
 void direct_line();
 void compute_data_size();
 
 void find_variables(char ** save);
 //these go in the function table
 void parse_cat(char **save);
-void parse_print(char **save);
 void parse_input(char **save);
 void parse_exit(char **save);
 void parse_if(char **save);
@@ -48,47 +46,34 @@ void (*parser_table[])(char **) = {
      parse_endfor
 };
 
-int main(){
-    FILE * fp = fopen("foo.py","r");
+int main(int argc, char * argv[]){
+    FILE * fp = fopen(argv[1],"rb");
     short i=0;
     while(fgets(BUFFR,80,fp)!=NULL){
-        printf("Tokenizing line %d:\n",++i);
+        printf("%d: ",i++);
         direct_line(); 
     }
 }
 
-void print_my_ints(){
-     struct _int_name_node * curr = int_names.next;
-     while(curr){
-        printf("%s: %d\n",curr->name,curr->val);
-        curr=curr->next;
-     }
-}
-
-void print_my_strings(){
-    struct _string_name_node * curr = string_names.next;
-    while(curr){
-        printf("%s(%d): \"%s\"\n",curr->name,curr->len,
-                (curr->init)?curr->init:"Uninitialized");
-        curr=curr->next;
-    }
-}
-
 void direct_line(){
-      int i=0;
-      //one liner to strtok_r the whole string
-      char * save;
-      //the first command is always seperated from the rest by a space
-      char * first_cmd = strtok_r(BUFFR," ",&save);
-      for(i=0;i<12;i++){
+    if(BUFFR[0]=='\0'||BUFFR[0]=='\n'){
+        printf("\n");
+        return;
+    }
+    int i=0;
+    //one liner to strtok_r the whole string
+    char * save = NULL;
+    //the first command is always seperated from the rest by a space
+    char * first_cmd = strtok_r(BUFFR," \n",&save);
+    for(i=0;i<12;i++){
         if(!strcmp(first_cmd,command_names[i])){
+            printf("%s\n",command_names[i]);
             parser_table[i](&save);
             break;
         }
         if(i==3 && !DATA_SIZE) compute_data_size();
-      }
+    }
 }
-
 
 void compute_data_size(){
     if(DATA_SIZE)
@@ -135,16 +120,12 @@ void parse_cat(char **save){
     find_variables(save);
 };
 
-void parse_print(char **save){
-    find_variables(save);
-};
-
 void parse_input(char **save){
     find_variables(save);
 };
 
 void parse_exit(char **save){
-    find_variables(save);
+    printf("exit\n");
 };
 
 void parse_if(char **save){
@@ -152,12 +133,10 @@ void parse_if(char **save){
 };
 
 void parse_endif(char **save){
-    find_variables(save);
 };
+
 void parse_for(char **save){
-    find_variables(save);
 };
 
 void parse_endfor(char **save){
-    find_variables(save);
 };

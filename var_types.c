@@ -1,11 +1,14 @@
 #include"var_types.h"
+//initialize var list pointers
+
+struct _string_name_node * string_tail = &string_names;
+struct _int_name_node * int_tail = &int_names;
 /*
  * Find all the integer variables on the line and add them to the symbol table
  */
 void declare_integers(char ** save){
     char * name_buffr;
     struct _int_name_node * new_node=NULL;
-    printf("Tokenizing Integers\n"); 
     while((name_buffr=strtok_r(NULL," ,\n",save))!=NULL){
         if(*name_buffr=='='){
             //we've found an '=' symbol
@@ -31,14 +34,12 @@ void declare_integers(char ** save){
         int_tail->next=new_node;
         int_tail=new_node;
     }
-    printf("\n");
 };
 
 /*
  * Find all the string variables on the line and add them to the symbol table
  */
 void declare_strings(char ** save){
-    printf("Tokenizing Strings\n"); 
     short i = 0;
     char * name_buffr;
     struct _string_name_node * new_node=NULL;
@@ -74,9 +75,9 @@ void declare_strings(char ** save){
         string_tail->next=new_node;
         string_tail=new_node;
     }
-    printf("\n");
 };
 
+/* like is_int_var, but for strings */
 short is_int_var(char * name){
     struct _int_name_node * curr_i=int_names.next;
     short offset = 0;
@@ -91,7 +92,7 @@ short is_int_var(char * name){
         
 }
 
-/* list is_int_var, but for strings */
+/* like is_int_var, but for strings */
 short is_string_var(char * name){
     struct _string_name_node* curr_s=string_names.next;
     short offset = 0;
